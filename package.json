@@ -1,0 +1,40 @@
+{
+    "name": "crypto-payments-challenge",
+    "description": "At a crypto payments company receives thousands of deposits from customers per day. This test is designed to test your ability to work with a transaction set that could get returned by a blockchain daemon like bitcoind.",
+    "version": "1.0.0",
+    "main": "dist/app.js",
+    "nodemonConfig": {
+        "watch": [
+            "src"
+        ],
+        "ext": "ts",
+        "ignore": [
+            "*.test.ts"
+        ],
+        "delay": "3",
+        "execMap": {
+            "ts": "ts-node"
+        }
+    },
+    "scripts": {
+        "start": "tsc && nodemon dist/app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "axios": "^1.6.8",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "eslint": "^9.0.0",
+        "nodemon": "^3.1.0",
+        "typescript": "^5.4.5"
+    },
+    "keywords": [
+        "challenge",
+        "payments"
+    ],
+    "author": "Jessica Elberg",
+    "license": "ISC"
+}
