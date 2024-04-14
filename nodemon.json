@@ -1,9 +1,10 @@
 {
     "watch": ["src"],
-    "ext": "ts",
+    "ext": "ts, js, json",
     "ignore": ["*.test.ts"],
     "delay": "3",
     "execMap": {
         "ts": "ts-node"
-    }
+    },
+    "exec": "ts-node --transpile-only ./src/app.ts"
 }
