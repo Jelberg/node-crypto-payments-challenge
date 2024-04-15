@@ -2,24 +2,18 @@ import expressLoader from './express'
 import pc from 'picocolors'
 import express from 'express'
 import { inicializeDB } from './database'
+import { loadTransaction } from './loader_transactions'
+import { loadClients } from './loader_clients'
 
 export const app = express()
 //Adds Express Static Middleware
 app.use(express.static('public'))
 
 export default async () => {
-    /**
-     * Port loader
-     */
     app.listen(8010, () => {
         try {
-            /**
-             * Consul Register
-             */
-
-            //consul.register;
             console.log(
-                pc.green(`
+                pc.white(`
         ################################################
         🛡️  Server listening on port: 8081 🛡️ 
         ################################################
@@ -32,10 +26,12 @@ export default async () => {
     })
 
     await inicializeDB()
+    await loadTransaction()
+    await loadClients()
 
     /**
      * Laods express essentials
      */
-    await expressLoader({ app })
-    console.log(pc.white('Express Loader has initalized successfully! ✅'))
+    //await expressLoader({ app })
+    //console.log(pc.white('Express Loader has initalized successfully! ✅'))
 }

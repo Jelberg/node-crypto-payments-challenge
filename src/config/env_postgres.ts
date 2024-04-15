@@ -3,5 +3,5 @@ export const env_postgress = {
     host: process.env.POSTGRESS_HOST || 'localhost',
     password: process.env.POSTGRESS_PASSWORDS || '1234',
     username: process.env.POSTGRESS_USERNAME || 'postgres',
-    database: process.env.POSTGRESS_DATABASE || 'crypto-payments',
+    database: process.env.POSTGRESS_DATABASE || 'cryptopayments',
 }

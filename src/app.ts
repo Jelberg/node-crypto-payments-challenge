@@ -1,3 +1,12 @@
 import loaders from './loaders'
+import { stroutTransactionResult } from './transaction'
 
-loaders()
+async function main() {
+    loaders().then(async () => {
+        await stroutTransactionResult()
+    })
+}
+
+if (require.main === module) {
+    main()
+}
