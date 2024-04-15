@@ -1,0 +1,26 @@
+version: '3'
+services:
+    db:
+        image: postgres:13
+        container_name: postgres-db
+        restart: always
+        environment:
+            - POSTGRES_DB=cryptopayments
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=1234
+        ports:
+            - '5432:5432' # Mapea el puerto 5432 del contenedor al puerto 5432 del host
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000' # Mapea el puerto 3000 del contenedor al puerto 3000 del host
+        depends_on:
+            - db # Dependencia en el servicio de la base de datos
+
+volumes:
+    postgres_data: # Volumen para persistir los datos de la base de datos

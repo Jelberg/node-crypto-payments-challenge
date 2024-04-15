@@ -1,4 +1,3 @@
-import expressLoader from './express'
 import pc from 'picocolors'
 import express from 'express'
 import { inicializeDB } from './database'
@@ -28,10 +27,4 @@ export default async () => {
     await inicializeDB()
     await loadTransaction()
     await loadClients()
-
-    /**
-     * Laods express essentials
-     */
-    //await expressLoader({ app })
-    //console.log(pc.white('Express Loader has initalized successfully! ✅'))
 }
