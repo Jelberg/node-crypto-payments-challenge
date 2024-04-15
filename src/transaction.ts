@@ -75,9 +75,10 @@ const printResults = (
     )
 
     // Calcular y mostrar el menor y mayor depósito válido
-    const amounts = validTransactions.map((transaction) =>
-        parseFloat(transaction.amount.toString())
+    const amounts = validTransactions.map(
+        (transaction) =>
+            transaction.amount >= 0 && parseFloat(transaction.amount.toString())
     )
-    console.log(`Smallest valid deposit: ${Math.min(...amounts)}`)
+    console.log(`Smallest valid deposit: ${Math.max(...amounts)}`)
     console.log(`Largest valid deposit: ${Math.max(...amounts)}`)
 }

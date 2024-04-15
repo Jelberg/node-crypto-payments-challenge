@@ -8,6 +8,7 @@ services:
             - POSTGRES_DB=cryptopayments
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=1234
+
         ports:
             - '5432:5432' # Mapea el puerto 5432 del contenedor al puerto 5432 del host
         volumes:

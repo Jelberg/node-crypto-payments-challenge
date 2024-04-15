@@ -17,6 +17,12 @@ COPY package*.json ./
 COPY tsconfig.json ./
 COPY src ./src
 
+ENV POSTGRES_DATABASE='cryptopayments'
+ENV POSTGRES_USERNAME='postgres'
+ENV POSTGRES_PASSWORD='1234'
+ENV POSTGRES_HOST='postgres-db'
+ENV POSTGRES_PORT=5432
+
 RUN npm install
 RUN npm install -g ts-node
 

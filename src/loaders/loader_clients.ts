@@ -21,7 +21,6 @@ export const loadClients = async () => {
                     }
                 })
         })
-
         console.log(pc.green('🦾 Usuarios almacenados en Postgres'))
     } catch (error) {
         console.error('Error:', error)
