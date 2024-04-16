@@ -1,7 +1,6 @@
 import pc from 'picocolors'
 import express from 'express'
 import { inicializeDB } from './database'
-import { loadClients } from './loader_clients'
 
 export const app = express()
 app.use(express.static('public'))
@@ -23,5 +22,4 @@ export default async () => {
     })
 
     await inicializeDB()
-    await loadClients()
 }

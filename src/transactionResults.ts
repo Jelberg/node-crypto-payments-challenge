@@ -1,11 +1,12 @@
 import { repository } from './loaders/database'
 import { Transaction, Users } from './entity'
+import { users_data } from './data/users'
 
 // Function to output transaction results
 export const stroutTransactionResult = async () => {
     // Retrieve all transactions and users
     const allTransactions = await getAllTransactions()
-    const allUsers = await getAllUsers()
+    const allUsers = getAllUsers()
 
     // Filter transactions with confirmations greater than or equal to 6
     const validTransactions = allTransactions.filter(
@@ -27,9 +28,14 @@ const getAllTransactions = async (): Promise<Transaction[]> => {
     return await repository.transactionsRepository.find()
 }
 
-// Retrieve all users from the database
-const getAllUsers = async (): Promise<Users[]> => {
-    return await repository.usersRepository.find()
+// Retrieve all users from the users_data const
+const getAllUsers = (): Users[] => {
+    return users_data.map((user) => {
+        const newUser = new Users()
+        newUser.name = user.name
+        newUser.address = user.address
+        return newUser
+    })
 }
 
 // Calculate totals for transactions with and without references

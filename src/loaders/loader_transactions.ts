@@ -32,24 +32,23 @@ const loadJsonDataToEntity = async (filePath: string, filename: string) => {
 
     if (isJSON(dir)) {
         const jsonData = JSON.parse(fs.readFileSync(dir, 'utf8'))
-
-        jsonData.transactions.map(async (data) => {
+        let count = 0
+        for (const data of jsonData.transactions) {
             const transactions = new Transaction()
             Object.assign(transactions, data)
             const transactionsRepository =
                 AppDataSource.getRepository(Transaction)
 
             // The txid is unique, so we validate that there are no duplicate transactions
-            await transactionsRepository
-                .findOneBy({ txid: data.txid })
-                .then(async (transaction) => {
-                    // If the transaction does not exist and the amount to send or receive is different from 0, it is added to the database
-                    if (!transaction && data.amount != 0) {
-                        await transactionsRepository.save(transactions)
-                    }
-                })
-        })
-
+            const transaction = await transactionsRepository.findOneBy({
+                txid: data.txid,
+            })
+            if (!transaction && data.amount !== 0) {
+                count += 1
+                await transactionsRepository.save(transactions)
+            }
+        }
+        //console.log(pc.bgMagenta(count))
         await saveFile(filename)
     } else {
         console.log(pc.red('❌ The file is not in JSON format'))
@@ -64,7 +63,7 @@ export async function loadTransaction(folderPath) {
 
         // Process each file found
         for (const file of files) {
-            const filePath = path.join(folderPath, file)
+            //const filePath = path.join(folderPath, file)
             await loadJsonDataToEntity(folderPath, file)
         }
 

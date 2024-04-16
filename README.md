@@ -32,7 +32,7 @@ src
 │ index.ts
 │
 ├───data // Mock data (only for clients)
-│ clients.json
+│ users.ts
 │
 ├───entity // Entities construction for TypeORM
 │ File.entity.ts
@@ -43,7 +43,6 @@ src
 ├───loaders // App bootstrappers
 │ database.ts // Database initializer
 │ index.ts
-│ loader_clients.ts // Registers clients from the clients.json file into the database
 │ loader_transactions.ts // Loads transaction files from the 'files' folder (root of the project)
 │
 └───utils // Function validations
