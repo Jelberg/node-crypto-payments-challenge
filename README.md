@@ -1,3 +1,45 @@
+# Challenge Crypto Payments
+
+✅ Loads files into the database (Only loads unique txids and transactions different from 0).
+✅ Loads known clients into the database.
+✅ Listens to changes in the 'files' folder (located at the root of the project) to detect new files and attempt to process them.
+✅ Displays results in the console.
+✅ Verifies that transactions have the minimum number of confirmations.
+
+## Proyect Structure
+
+'''
+src
+│ main.ts // Initializes the app -> Loads files from the 'files' folder and listens for changes on it
+│ transactionResults.ts // Results of transactions
+│
+├───config // Sets environments
+│ environments.ts
+│ env_postgres.ts
+│ index.ts
+│
+├───data // Mock data (only for clients)
+│ clients.json
+│
+├───entity // Entities construction for TypeORM
+│ File.entity.ts
+│ index.ts
+│ Transaction.entity.ts
+│ User.entity.ts
+│
+├───loaders // App bootstrappers
+│ database.ts // Database initializer
+│ index.ts
+│ loader_clients.ts // Registers clients from the clients.json file into the database
+│ loader_transactions.ts // Loads transaction files from the 'files' folder (root of the project)
+│
+└───utils // Function validations
+validateJson.ts
+
+'''
+
+================================================================
+
 # Node.js and Docker Crypto/Payments Test
 
 At a crypto payments company receives thousands of deposits from customers per day. This test is designed to test your ability to work with a transaction set that could get returned by a blockchain daemon like bitcoind.
