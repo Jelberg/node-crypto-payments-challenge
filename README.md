@@ -6,6 +6,19 @@
 ✅ Displays results in the console.  
 ✅ Verifies that transactions have the minimum number of confirmations.
 
+## Run Project
+
+```
+// with Docker
+docker-compose up
+
+// with local (make sure .env exists)
+npm run i
+
+npm run start
+
+```
+
 ## Proyect Structure
 
 ```
