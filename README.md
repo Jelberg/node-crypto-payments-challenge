@@ -8,7 +8,7 @@
 
 ## Run Project
 
-`
+```
 // with Docker
 docker-compose up
 
@@ -17,7 +17,7 @@ npm run i
 
 npm run start
 
-`
+```
 
 ## Proyect Structure
 
