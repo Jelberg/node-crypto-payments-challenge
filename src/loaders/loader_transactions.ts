@@ -3,17 +3,21 @@ import path from 'node:path'
 import pc from 'picocolors'
 import { Transaction, File } from '../entity'
 import { AppDataSource } from './database'
-import { isJSON } from '../utils/validateJson'
+import {
+    isJSON,
+    isValidTransactionFormat,
+    isValidDeposit,
+} from '../utils/validateJson'
 
 // Check if a file has been processed before
-const isFileProcessed = async (filename: string) => {
+export const isFileProcessed = async (filename: string) => {
     const filesRepository = AppDataSource.getRepository(File)
     const processedFile = await filesRepository.findOne({ where: { filename } })
     return !!processedFile
 }
 
 // Save file to database after processing
-const saveFile = async (filename: string) => {
+export const saveFile = async (filename: string) => {
     const file = new File()
     file.filename = filename
     const filesRepository = AppDataSource.getRepository(File)
@@ -21,7 +25,10 @@ const saveFile = async (filename: string) => {
 }
 
 // Load JSON data from file and store transactions in database
-const loadJsonDataToEntity = async (filePath: string, filename: string) => {
+export const loadJsonDataToEntity = async (
+    filePath: string,
+    filename: string
+) => {
     const dir = path.join(filePath, filename)
     if (await isFileProcessed(filename)) {
         console.log(
@@ -33,23 +40,32 @@ const loadJsonDataToEntity = async (filePath: string, filename: string) => {
     if (isJSON(dir)) {
         const jsonData = JSON.parse(fs.readFileSync(dir, 'utf8'))
         let count = 0
-        for (const data of jsonData.transactions) {
-            const transactions = new Transaction()
-            Object.assign(transactions, data)
-            const transactionsRepository =
-                AppDataSource.getRepository(Transaction)
+        if (!isValidDeposit(jsonData)) {
+            console.log(pc.red(`❌ Invalid deposit format`))
+        } else {
+            for (const data of jsonData.transactions) {
+                if (!isValidTransactionFormat(data)) {
+                    console.log(pc.red(`❌ Invalid transaction format`))
+                    continue
+                }
 
-            // The txid is unique, so we validate that there are no duplicate transactions
-            const transaction = await transactionsRepository.findOneBy({
-                txid: data.txid,
-            })
-            if (!transaction && data.amount !== 0) {
-                count += 1
-                await transactionsRepository.save(transactions)
+                const transactions = new Transaction()
+                Object.assign(transactions, data)
+                const transactionsRepository =
+                    AppDataSource.getRepository(Transaction)
+
+                // The txid is unique, so we validate that there are no duplicate transactions
+                const transaction = await transactionsRepository.findOneBy({
+                    txid: data.txid,
+                })
+                if (!transaction && data.amount !== 0) {
+                    count += 1
+                    await transactionsRepository.save(transactions)
+                }
             }
+            //console.log(pc.bgMagenta(count))
+            await saveFile(filename)
         }
-        //console.log(pc.bgMagenta(count))
-        await saveFile(filename)
     } else {
         console.log(pc.red('❌ The file is not in JSON format'))
     }

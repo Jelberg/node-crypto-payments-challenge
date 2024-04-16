@@ -22,6 +22,7 @@ ENV POSTGRES_USERNAME='postgres'
 ENV POSTGRES_PASSWORD='1234'
 ENV POSTGRES_HOST='postgres-db'
 ENV POSTGRES_PORT=5432
+ENV PATH_TRANSACTIONS='./files/'
 
 RUN npm install
 RUN npm install -g ts-node
