@@ -1,23 +1,28 @@
 import fs from 'node:fs'
-import { enviroments } from './config'
+import { environments } from './config'
 import loaders from './loaders'
 import { loadTransaction } from './loaders/loader_transactions'
 import { stroutTransactionResult } from './transactionResults'
 
+// Main function to start the application
 async function main() {
-    // Cargar inicializadores
+    // Load initializers
     await loaders()
 
-    const folderPath = enviroments.path_deposits
+    // Path to the folder to monitor for changes
+    const folderPath = environments.path_deposits
+
+    // Load transactions initially
     await loadTransaction(folderPath)
 
+    // Watch for changes in the folder and reload transactions
     fs.watch(folderPath, (eventType, filename) => {
         if (eventType === 'rename') {
             loadTransaction(folderPath)
         }
     })
 
-    // Procesar resultados de transacciones
+    // Process transaction results
     await stroutTransactionResult()
 }
 

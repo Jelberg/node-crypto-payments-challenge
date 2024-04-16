@@ -2,9 +2,9 @@ import fs from 'fs'
 import pc from 'picocolors'
 import { Users } from '../entity'
 import { AppDataSource } from './database'
-import { enviroments } from '../config'
+import { environments } from '../config'
 
-const filePath = enviroments.path_users
+const filePath = environments.path_users
 
 export const loadClients = async () => {
     try {
