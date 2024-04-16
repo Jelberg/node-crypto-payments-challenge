@@ -25,5 +25,5 @@ export default async () => {
     })
 
     await inicializeDB()
-    await loadClients().then(async () => await loadTransaction())
+    await loadClients() //.then(async () => await loadTransaction())
 }

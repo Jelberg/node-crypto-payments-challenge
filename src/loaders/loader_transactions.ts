@@ -1,8 +1,9 @@
-import fs from 'fs'
+import fs from 'node:fs'
+import path from 'node:path'
 import pc from 'picocolors'
-import { data } from '../data/transaction_data'
 import { Transaction, File } from '../entity'
 import { AppDataSource } from './database'
+import { isJSON } from '../utils/validateJson'
 
 const isFileProcessed = async (filename: string) => {
     const filesRepository = AppDataSource.getRepository(File)
@@ -18,38 +19,50 @@ const saveFile = async (filename: string) => {
 }
 
 const loadJsonDataToEntity = async (filePath: string, filename: string) => {
-    const path = filePath + filename
+    const dir = path.join(filePath, filename)
     if (await isFileProcessed(filename)) {
         console.log(pc.yellow(`El archivo ${filename} ya ha sido procesado.`))
         return
     }
 
-    const jsonData = JSON.parse(fs.readFileSync(path, 'utf8'))
+    if (isJSON(dir)) {
+        const jsonData = JSON.parse(fs.readFileSync(dir, 'utf8'))
 
-    jsonData.transactions.map(async (data) => {
-        const transactions = new Transaction()
-        Object.assign(transactions, data)
-        const transactionsRepository = AppDataSource.getRepository(Transaction)
-        await transactionsRepository
-            .findOneBy({ txid: data.txid })
-            .then(async (transaction) => {
-                if (!transaction) {
-                    await transactionsRepository.save(transactions)
-                }
-            })
-    })
+        jsonData.transactions.map(async (data) => {
+            const transactions = new Transaction()
+            Object.assign(transactions, data)
+            const transactionsRepository =
+                AppDataSource.getRepository(Transaction)
+            await transactionsRepository
+                .findOneBy({ txid: data.txid })
+                .then(async (transaction) => {
+                    if (!transaction && data.amount != 0) {
+                        await transactionsRepository.save(transactions)
+                    }
+                })
+        })
 
-    await saveFile(filename)
+        await saveFile(filename)
+    } else {
+        console.log(pc.red('❌ El archivo no es formato JSON'))
+    }
 }
 
-export const loadTransaction = async () => {
+export async function loadTransaction(folderPath) {
     try {
-        for (const transaction of data) {
-            await loadJsonDataToEntity(transaction.path, transaction.name)
+        // Lee todos los archivos en la carpeta
+        const files = fs.readdirSync(folderPath)
+
+        // Procesa cada archivo encontrado
+        for (const file of files) {
+            const filePath = path.join(folderPath, file)
+            await loadJsonDataToEntity(folderPath, file)
         }
 
-        console.log(pc.green('🟢 Transacciones almacenadas en Postgres'))
+        console.log(pc.green('🟡 Transacciones almacenadas en Postgres'))
     } catch (error) {
-        console.error('Error:', error)
+        console.error(
+            `Error al leer la carpeta ${folderPath}: ${error.message}`
+        )
     }
 }
