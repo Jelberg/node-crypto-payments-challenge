@@ -1,14 +1,14 @@
 # Challenge Crypto Payments
 
-✅ Loads files into the database (Only loads unique txids and transactions different from 0).
-✅ Loads known clients into the database.
-✅ Listens to changes in the 'files' folder (located at the root of the project) to detect new files and attempt to process them.
-✅ Displays results in the console.
+✅ Loads files into the database (Only loads unique txids and transactions different from 0).  
+✅ Loads known clients into the database.  
+✅ Listens to changes in the 'files' folder (located at the root of the project) to detect new files and attempt to process them.  
+✅ Displays results in the console.  
 ✅ Verifies that transactions have the minimum number of confirmations.
 
 ## Proyect Structure
 
-'''
+```
 src
 │ main.ts // Initializes the app -> Loads files from the 'files' folder and listens for changes on it
 │ transactionResults.ts // Results of transactions
@@ -36,7 +36,7 @@ src
 └───utils // Function validations
 validateJson.ts
 
-'''
+```
 
 ================================================================
 
